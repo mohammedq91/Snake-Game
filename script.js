@@ -82,16 +82,13 @@ function changeSnakeDirection () {
     }
     if(e.key === 'ArrowDown'){
       console.log('Arrow down is clicked!')
-      moveSnake()
     }
     if(e.key === 'ArrowRight'){
       console.log('Arrow right is clicked!')
       colorRect(snakeX, canvas.height/2, 20, 20,'green');
-      moveSnake()
     }
     if(e.key === 'ArrowLeft'){
       console.log('Arrow left is clicked!')
-      moveSnake()
     }
   };
 }
@@ -105,11 +102,6 @@ function arrowUp(){
   // colorRect(snakeY, canvas.height/2, 20, 20,'green');
   colorRect(snakeX, snakeY, 20, 20,'green');
 }
-
-// up 38
-// down 40
-// right 39
-// left 37
 
 // if the snake moves to the right/east
   // option 1, move the snake to north
