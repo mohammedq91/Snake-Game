@@ -1,32 +1,92 @@
 var canvas;
 var canvasContext;
-var snakeX = 50;
-// var snakeY = 20;
+var appleX = 100;
 
 let snake = {
   body: [{x: 50, y: 50}],
   direction: undefined,
 }
-console.log(snake.body[0].x);
-
-var appleX = 100;
 
 window.onload = function (){
   canvas = document.getElementById('gameCanvas');
   canvasContext = canvas.getContext('2d');
+  drawGameWindow();
 
   var framesPerSecond = 30;
   setInterval(function(){
     
   }, 1000/framesPerSecond);
-
-  drawGameCanvas();
-    drawSnake(snake.body[0].x, snake.body[0].y, 20, 20,'green');
-    drawApple(appleX,canvas.height/3, 10, 'red');
-    
+  drawSnake();
+  drawApple(appleX,canvas.height/3, 10, 'red');
+  changeSnakeDirection();
     // gameOver();
-    changeSnakeDirection();
+  
+    
 }
+
+function drawSnake(){
+  snake.body.forEach((part) => {
+    colorRect(part.x, part.y, 20, 20, 'green')
+    //console.log(part.y)
+  });
+};
+
+function changeSnakeDirection () {
+  document.onkeydown = function(e){
+    
+    if(e.key === 'ArrowUp'){
+      console.log('Arrow up is clicked!')
+      turnSnakeUp();
+
+      // if snake is not moving up or down && if snake is moveing right or left
+      // then move up
+      // arrowUp();
+      
+      // snake.body.y -= 20
+    }
+    if(e.key === 'ArrowDown'){
+      console.log('Arrow down is clicked!')
+      
+    }
+    if(e.key === 'ArrowRight'){
+      console.log('Arrow right is clicked!')
+      // moveSnake();
+      
+    }
+    if(e.key === 'ArrowLeft'){
+      console.log('Arrow left is clicked!')
+    }
+  };
+};
+
+//goal: change x and y coordinate of snake
+//in order to do that we need to:
+//  1) add x coordinate to move right
+//  2) add -x to move left
+//  3) add y to move down
+//  4) add -y to move up
+ 
+
+// function moveSnake(){
+//   if (body.y === '-'){
+//     if (snake.body.y ===0){
+//       snake.x = 0;
+//       snake.y -= 20;
+//       console.log(snake.y)
+//     };
+//   };
+// };
+//console.log(snake.body[0].x)
+
+
+function turnSnakeUp(direction){
+
+  if(snake.direction === '+x' || snake.direction === '-x') {
+    snake.body.x = 0;
+    snake.body.y -= 20;
+  };
+};
+
 
 function gameOver(){
   snakeX += 5;
@@ -55,38 +115,16 @@ function gameOver(){
   };
 };
 
-function changeSnakeDirection () {
-  document.onkeydown = function(e){
-    
-    if(e.key === 'ArrowUp'){
-      console.log('Arrow up is clicked!')
-      // arrowUp();
-      
-    }
-    if(e.key === 'ArrowDown'){
-      console.log('Arrow down is clicked!')
-    }
-    if(e.key === 'ArrowRight'){
-      console.log('Arrow right is clicked!')
-      // colorRect(snakeX, canvas.height/2, 20, 20,'green');
-    }
-    if(e.key === 'ArrowLeft'){
-      console.log('Arrow left is clicked!')
-    }
-  };
-};
+
 
 
 // all drawing below
-function drawGameCanvas(){  
+function drawGameWindow(){  
   colorRect(0,0, canvas.width, canvas.height,'black');
   //colorRect(snakeX, canvas.height/2, 20, 20,'green');
 };
 
-function drawSnake(leftX, topY, width, height, drawColor){
-  canvasContext.fillStyle = drawColor;
-  canvasContext.fillRect (leftX, topY, width, height);
-};
+
 
 function drawApple (centerX, centerY, radius, drawColor){
   canvasContext.fillStyle = drawColor;
@@ -113,15 +151,7 @@ function colorRect(leftX, topY, width, height, drawColor){
   canvasContext.fillRect (leftX, topY, width, height);
 };
 
-// function arrowUp(){
-//   if (snakeY === 0){
-//     snakeX = 0;
-//     snakeY += 5;
-//   };
-//   colorRect(snakeY, canvas.height/2, 20, 20,'green');
-//   colorRect(snakeX, snakeY, 20, 20,'green');
-// };
-
+//-----------------------------------------------------------------------------
 
 
 // if the snake moves to the right/east
@@ -142,18 +172,4 @@ function colorRect(leftX, topY, width, height, drawColor){
 
 // function snakeReset (){
 //   const ballx = snakeX;
-// }
-
-// move snake object with keyboard 
-// display apple randomly on window if/when snake eats an apple
-
-// function appleResetPosition (canvas){
-//   if(ballX & ballY === ){
-//     for (position of canvas){
-//     }
-//   }
-//   displayApple = Math.random
-
-// return drawCircle[Math.random()]
-
 // }
