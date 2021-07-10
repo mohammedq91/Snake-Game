@@ -6,6 +6,7 @@ let snake = {
   body: [{x: 50, y: 50}],
   direction: undefined,
 }
+//, {x: 50, y: 70}, {x: 50, y: 90}
 
 window.onload = function (){
   canvas = document.getElementById('gameCanvas');
@@ -14,117 +15,94 @@ window.onload = function (){
 
   var framesPerSecond = 30;
   setInterval(function(){
+    changeSnakeDirection();
     
   }, 1000/framesPerSecond);
   drawSnake();
   drawApple(appleX,canvas.height/3, 10, 'red');
-  changeSnakeDirection();
-    // gameOver();
   
-    
+    // gameOver();
 }
 
 function drawSnake(){
   snake.body.forEach((part) => {
     colorRect(part.x, part.y, 20, 20, 'green')
-    //console.log(part.y)
   });
 };
 
 function changeSnakeDirection () {
   document.onkeydown = function(e){
+
+    var keyboard = e.key;
     
-    if(e.key === 'ArrowUp'){
+    if(keyboard === 'ArrowUp'){
       console.log('Arrow up is clicked!')
-      turnSnakeUp();
-
-      // if snake is not moving up or down && if snake is moveing right or left
-      // then move up
-      // arrowUp();
-      
-      // snake.body.y -= 20
-    }
-    if(e.key === 'ArrowDown'){
+      snake.direction = "up";
+      console.log(snake.direction)
+    };
+    if(keyboard === 'ArrowDown'){
       console.log('Arrow down is clicked!')
+      snake.direction = "down";
       
-    }
-    if(e.key === 'ArrowRight'){
+    };
+    if(keyboard === 'ArrowRight'){
       console.log('Arrow right is clicked!')
-      // moveSnake();
-      
-    }
-    if(e.key === 'ArrowLeft'){
+      snake.direction = "right";
+    };
+    if(keyboard === 'ArrowLeft'){
       console.log('Arrow left is clicked!')
-    }
+      snake.direction = "left";
+    };
   };
 };
 
-//goal: change x and y coordinate of snake
-//in order to do that we need to:
-//  1) add x coordinate to move right
-//  2) add -x to move left
-//  3) add y to move down
-//  4) add -y to move up
- 
+function moveSnake(){
+  switch (snake.direction) {
+    case "up":
+      snake.body[0].y -= 20;
+      break;
 
-// function moveSnake(){
-//   if (body.y === '-'){
-//     if (snake.body.y ===0){
-//       snake.x = 0;
-//       snake.y -= 20;
-//       console.log(snake.y)
-//     };
-//   };
-// };
-//console.log(snake.body[0].x)
+    case "down":
+      snake.body[0].y += 20;
+      break;
 
-
-function turnSnakeUp(direction){
-
-  if(snake.direction === '+x' || snake.direction === '-x') {
-    snake.body.x = 0;
-    snake.body.y -= 20;
+    case "right":
+      snake.body[0].x += 20;
+      break;
+    
+    case "left":
+      snake.body[0].x -= 20;
+      break;
   };
 };
-
 
 function gameOver(){
   snakeX += 5;
   snakeY += 5;
 
   if (snakeX >= canvas.width){
-    // alert('Game is over!')
     snakeReset();
     canvasText((canvas.width/2)-78, (canvas.height/2)-60,'Game Over!', 'orange');
     
   } 
   if (snakeX < 0){
-    // alert('Game is over!')
     snakeReset();
     canvasText((canvas.width/2)-78, (canvas.height/2)-60,'Game Over!', 'orange');
   }
   if (snakeY > canvas.height){
-    // alert('Game is over!')
     snakeReset();
     canvasText((canvas.width/2)-78, (canvas.height/2)-60,'Game Over!', 'orange');
   } 
   if (snakeY < 0){
-    // alert('Game is over!')
     snakeReset();
     canvasText((canvas.width/2)-78, (canvas.height/2)-60,'Game Over!', 'orange');
   };
 };
 
-
-
-
 // all drawing below
 function drawGameWindow(){  
   colorRect(0,0, canvas.width, canvas.height,'black');
-  //colorRect(snakeX, canvas.height/2, 20, 20,'green');
 };
-
-
 
 function drawApple (centerX, centerY, radius, drawColor){
   canvasContext.fillStyle = drawColor;
@@ -150,26 +128,3 @@ function colorRect(leftX, topY, width, height, drawColor){
   canvasContext.fillStyle = drawColor;
   canvasContext.fillRect (leftX, topY, width, height);
 };
-
-//-----------------------------------------------------------------------------
-
-
-// if the snake moves to the right/east
-  // option 1, move the snake to north
-  // optoin 2, move the snake to south
-
-//if the snake is moving to the left/west
-  // option 1, move the snake to north
-  // optoin 2, move the snake to south 
-
-// if the snake is moving to the up/north
-  // option 1, move the snake to the right
-  // option 2, move the snake to the left
-
-// if the snake is moving to the down/south
-  // option 1, move the snake to the right
-  // option 2, move the snake to the left
-
-// function snakeReset (){
-//   const ballx = snakeX;
-// }
