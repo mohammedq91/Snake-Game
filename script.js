@@ -2,13 +2,13 @@ var canvas;
 var canvasContext;
 
 let snake = {
-  headPosition: [{x: 100, y: 100}],
+  head: [{x: 100, y: 100}],
   // size: [{width:20, height:20}],
   direction: undefined,
 }
 
 const apple = {
-  body: [{x: 400, y: 200}],
+  position: [{x: 400, y: 200}],
   // color: red
 }
 //, {x: 50, y: 70}, {x: 50, y: 90}
@@ -43,22 +43,22 @@ function gameInitializer(){
 
 // if snake head coordinate === apple coordinate, append snake body to snake object
 function growSnake(){
-  if (snake.headPosition[0].x === apple.body[0].x ){
-    snake.headPosition.push([snake.headPosition.x-snakeWidth, snake.headPosition.y]) = drawSnake();
+  if (snake.head[0].x === apple.position[0].x ){
+    snake.head.push([snake.head.x-snakeWidth, snake.head.y]) = drawSnake();
   }
 }
 
 function wallDetection(snakeWidth, snakeHeight){
-  if (snake.headPosition[0].x > canvas.width){
+  if (snake.head[0].x > canvas.width){
     // snakeReset(); 
   } 
-  if (snake.headPosition[0].x < 0){
+  if (snake.head[0].x < 0){
     // snakeReset(); 
   }
-  if (snake.headPosition[0].y > canvas.height){
+  if (snake.head[0].y > canvas.height){
     // snakeReset(); 
   } 
-  if (snake.headPosition[0].y < 0){
+  if (snake.head[0].y < 0){
     // snakeReset();
   };
 };
@@ -84,16 +84,16 @@ function changeSnakeDirection () {
 function moveSnake(){
   switch (snake.direction) {
     case "up":
-      snake.body[0].y -= 20;
+      snake.head[0].y -= 20;
       break;
     case "down":
-      snake.body[0].y += 20;
+      snake.head[0].y += 20;
       break;
     case "right":
-      snake.body[0].x += 20;
+      snake.head[0].x += 20;
       break;    
     case "left":
-      snake.body[0].x -= 20;
+      snake.head[0].x -= 20;
       break;
   };
 };
@@ -107,17 +107,16 @@ function drawGameWindow(){
   drawRect(0,0, canvas.width, canvas.height,'black');
 };
 
-function drawApple (){
-  const appleWidth = 20;
-  const appleHeight = 20;
-  // snake.size.width;
-  // snake.size.height;
-  snake.body.forEach((part) => {
-    drawRect(part.x, part.y, snakeWidth, snakeHeight, 'green')
-  });
+// function drawApple (){
+//   const appleWidth = 20;
+//   const appleHeight = 20;
+//   // snake.size.width;
+//   // snake.size.height;
+//   snake.position.forEach((part) => {
+//     drawRect(part.x, part.y, snakeWidth, snakeHeight, 'green')
+//   });
 
-
-}
+// }
   
 
 function drawApple (centerX, centerY, radius, drawColor){
@@ -134,7 +133,7 @@ function drawSnake(){
   const snakeHeight = 20;
   // snake.size.width;
   // snake.size.height;
-  snake.body.forEach((part) => {
+  snake.head.forEach((part) => {
     drawRect(part.x, part.y, snakeWidth, snakeHeight, 'green')
   });
   // wallDetection(snakeWidth,snakeHeight)
