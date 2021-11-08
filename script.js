@@ -1,7 +1,6 @@
 var canvas;
 var canvasContext;
 
-
 let snake = {
   body: [{x: 100, y: 100}],
   // size: [{width:20, height:20}],
@@ -17,6 +16,7 @@ const apple = {
 window.onload = function (){
   canvas = document.getElementById('gameCanvas');
   canvasContext = canvas.getContext('2d');
+  const gridSize = 4;
   
   var framesPerSecond = 30;
   setInterval(function(){
@@ -31,67 +31,53 @@ function gameInitializer(){
     moveSnake();
     drawSnake();
     isAppleEaten();
-    
-    if (wallDetection()){
-      alert('game is alert');
-      console.log('You clicked me')
-      // gameOverText();
-    };
+    if (wallDetection()) gameOver();
 }
 
-function placeApple(){
-  return apple.position.x = Math.floor(math.random());
-  return apple.position.y = Math.floor(math.random());
-}
+// function placeApple(appleX, appleY){
+//   const appleX = Math.floor(Math.random)
+//   const appleY = Math.floor(Math.random)
+// }
 
 function isAppleEaten(){
+  growSnake();
+  // var appleEaten
+  // console.log(appleEaten)
+  // placeApple();
+}
+
+function growSnake(){
   let body = snake.body[0];
   let appleX = canvas.width/2;
   let appleY = canvas.height/2;
   if(body.x === appleX && body.y === appleY){
+    snake.body.push({}, Object.assign(snake.body[0]));
     console.log('Apple is eaten')
-    // placeApple();
-  }
+  };
 }
 
-function growSnake(){
-  const newPiece = {x:0, y:0}
-  const lastPiece = snake.body[snake.body.length-1]
-  newPiece.x = lastPiece.x;
-  newPiece.y = lastPiece.y;
-  snake.body.push(newPiece)
-  // snake.body.shift(newPiece)
-  // snake.body.concat(newPiece)
-  moveSnake();
+function gameOver(positionX, positionY){
+  const textWidth = 330;
+  const textHeight = 300;
+  positionX, positionY = clearInterval();
+  drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
+  
 }
-
-// if snake coord coordinate === apple coordinate, append snake body to snake object
-// function growSnake(snakeWidth){
-//     snake.body.push([snake.body.x-snakeWidth, snake.body.y]);
-//   };
 
 function wallDetection(){
-  if (snake.body[0].x > canvas.width){
-   
-    // snakeReset(); 
+  if (snake.body[0].x > canvas.width){ 
+    gameOver();
   } 
   if (snake.body[0].x < 0){
-    // snakeReset(); 
-    console.log('You clicked me')
+    gameOver(); 
   }
   if (snake.body[0].y > canvas.height){
-    // snakeReset(); 
+    gameOver(); 
   } 
   if (snake.body[0].y < 0){
-    // snakeReset();
+    gameOver();
   };
 };
-
-// 2. snake body if coord , same coordinate as any body part(s)
-// 3. Snake object, body array
-// 4. declone piece (i.e copy of snake body), then add to the body
-//    append to the snake body either on front or back end of the snake
-// 5. Grow Snake functionality.
 
 function changeSnakeDirection () {
   document.onkeydown = function(e){
@@ -105,29 +91,32 @@ function changeSnakeDirection () {
 };
 
 function moveSnake(){
-  const speedX = 20;
-  const speedY = 20
+  for (let i = snake.body.length -1; i > 0; --i){
+    console.log(i)
+    snake.body[i] = Object.assign({}, snake.body[i-1])
+    console.log("The value of i is :" ,i)
+  };
+  // const speedX = 2;
+  // const speedY = 2;
   switch (snake.direction) {
     case "up":
-      snake.body[0].y -= speedY;
+      var positionY = snake.body[0].y -= 20 //+ speedY;
+        /*console.log(positionY)*/;
       break;
     case "down":
-      snake.body[0].y += speedY;
+      var positionY = snake.body[0].y += 20 //+ speedY;
+        /*console.log(positionY)*/;
       break;
     case "right":
-      snake.body[0].x += speedY;
+      var positionX = snake.body[0].x += 20 //+ speedX;
+        /*console.log(positionX)*/;
       break;    
     case "left":
-      snake.body[0].x -= speedY;
+      var positionX = snake.body[0].x -= 20 //+ speedX;
+        /*console.log(positionX)*/;
       break;
   };
 };
-
-// function isAppleEaten(){
-//   if(snake.body[0] === apple.coord[0]){
-//     apple.coord[0] === math.floor(math.random);
-//   };
-// }
 
 //-----------------------------------------
 // All Drawing Below
@@ -138,9 +127,6 @@ function drawGameWindow(){
 function drawApple(){
   const appleWidth = 20;
   const appleHeight = 20;
-  // apple.coord.forEach((piece) =>{
-  //   drawRect(piece.x, piece.y, appleWidth, appleHeight, 'red')
-  // })
     drawRect(canvas.width/2,canvas.height/2, appleWidth, appleHeight, 'red') 
 }
 
@@ -160,6 +146,7 @@ function drawSnake(){
 // };
 
 function drawText(font, color, text, posX, posY){
+  
   canvasContext.font = font;
   canvasContext.fillStyle = color;
   canvasContext.fillText(text, posX, posY);
