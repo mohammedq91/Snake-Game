@@ -2,13 +2,16 @@ var canvas;
 var canvasContext;
 
 let snake = {
-  body: [{x: 100, y: 100}],
+  head: [{x: 100, y: 100}],
+  // body: [{x: snake.head.x , y: snake.head.y}],
   // size: [{width:20, height:20}],
   direction: undefined,
   // length: 2
 }
+// let body = {x: snake.head.x , y: snake.head.y} 
+
 const apple = {
-  position: [{x:200 , y:200}],
+  coord: [{x:200 , y:200}],
   // size: [{width:20}, {height:20}],
   // color: 'red'
 }
@@ -31,29 +34,41 @@ function gameInitializer(){
     moveSnake();
     drawSnake();
     isAppleEaten();
+    // placeApple();
     if (wallDetection()) gameOver();
 }
 
-// function placeApple(appleX, appleY){
-//   const appleX = Math.floor(Math.random)
-//   const appleY = Math.floor(Math.random)
-// }
+function placeApple(){
+  // const foodX = Math.floor(Math.random)
+  // const foodY = Math.floor(Math.random)
+  // console.log("Random food placement is:", foodX, foodY)
+
+  const position = apple.coord
+  return position[Math.floor(Math.random() * position[0])]
+  console.log("randomize apple coord:", position)
+
+  // const choices = ["rock", "paper", "scissors"];
+  // console.log(Math.random() *choices.length)
+  // console.log(Math.random())
+  // return choices[Math.floor(Math.random() * choices.length)];
+}
 
 function isAppleEaten(){
-  growSnake();
-  // var appleEaten
-  // console.log(appleEaten)
-  // placeApple();
+  let head = snake.head[0];
+  let appleX = canvas.width/2;
+  let appleY = canvas.height/2;
+  if(head.x === appleX && head.y === appleY){
+    growSnake();
+    console.log("Apple is eaten")
+    console.log(snake.head.length)
+    placeApple()
+  };
 }
 
 function growSnake(){
-  let body = snake.body[0];
-  let appleX = canvas.width/2;
-  let appleY = canvas.height/2;
-  if(body.x === appleX && body.y === appleY){
-    snake.body.push({}, Object.assign(snake.body[0]));
-    console.log('Apple is eaten')
-  };
+  const body = {x: snake.head.x , y: snake.head.y} 
+  //const body = snake.head[0]   
+  snake.head.push(body)
 }
 
 function gameOver(positionX, positionY){
@@ -65,16 +80,16 @@ function gameOver(positionX, positionY){
 }
 
 function wallDetection(){
-  if (snake.body[0].x > canvas.width){ 
+  if (snake.head[0].x > canvas.width){ 
     gameOver();
   } 
-  if (snake.body[0].x < 0){
+  if (snake.head[0].x < 0){
     gameOver(); 
   }
-  if (snake.body[0].y > canvas.height){
+  if (snake.head[0].y > canvas.height){
     gameOver(); 
   } 
-  if (snake.body[0].y < 0){
+  if (snake.head[0].y < 0){
     gameOver();
   };
 };
@@ -91,28 +106,27 @@ function changeSnakeDirection () {
 };
 
 function moveSnake(){
-  for (let i = snake.body.length -1; i > 0; --i){
-    console.log(i)
-    snake.body[i] = Object.assign({}, snake.body[i-1])
-    console.log("The value of i is :" ,i)
+  for (let i = snake.head.length -1; i > 0; --i){
+    snake.head[i] = Object.assign({}, snake.head[i-1])
   };
+
   // const speedX = 2;
   // const speedY = 2;
   switch (snake.direction) {
     case "up":
-      var positionY = snake.body[0].y -= 20 //+ speedY;
+      var positionY = snake.head[0].y -= 20 //+ speedY;
         /*console.log(positionY)*/;
       break;
     case "down":
-      var positionY = snake.body[0].y += 20 //+ speedY;
+      var positionY = snake.head[0].y += 20 //+ speedY;
         /*console.log(positionY)*/;
       break;
     case "right":
-      var positionX = snake.body[0].x += 20 //+ speedX;
+      var positionX = snake.head[0].x += 20 //+ speedX;
         /*console.log(positionX)*/;
       break;    
     case "left":
-      var positionX = snake.body[0].x -= 20 //+ speedX;
+      var positionX = snake.head[0].x -= 20 //+ speedX;
         /*console.log(positionX)*/;
       break;
   };
@@ -133,7 +147,7 @@ function drawApple(){
 function drawSnake(){
   const snakeWidth = 20;
   const snakeHeight = 20;
-  snake.body.forEach((part) => {
+  snake.head.forEach((part) => {
     drawRect(part.x, part.y, snakeWidth, snakeHeight, 'green')
   });
   // wallDetection(snakeWidth,snakeHeight)
