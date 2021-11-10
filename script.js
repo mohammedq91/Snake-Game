@@ -45,6 +45,11 @@ function playGame(){
 }
 
 function placeApple(){
+  const gridSize = 20
+  var num = Math.floor(Math.random() * canvas.width);
+//             || Math.floor(Math.random() *(canvas.height/ gridSize));
+  console.log(num) 
+  var x = 2;
   // const foodX = Math.floor(Math.random)
   // const foodY = Math.floor(Math.random)
   // console.log("Random food placement is:", foodX, foodY)
@@ -65,10 +70,10 @@ function placeApple(){
   // let randomCoord = Math.floor(Math.random()* coordinates.length)
   // console.log("randomCoord is: ", randomCoord)
 
-  for (const [key,value] of Object.entries(apple)){
-    var appleCoord = Math.floor(Math.random()*apple.coord)
-    console.log("appleCoord is :", appleCoord)
-  }
+  // for (const [key,value] of Object.entries(apple)){
+  //   var appleCoord = Math.floor(Math.random()*apple.coord)
+  //   console.log("appleCoord is :", appleCoord)
+  // }
 
   // const choices = ["rock", "paper", "scissors"];
   // console.log(Math.random() *choices.length)
@@ -82,9 +87,7 @@ function isAppleEaten(){
   let appleY = canvas.height/2;
   if(head.x === appleX && head.y === appleY){
     growSnake();
-    console.log("Apple is eaten")
-    console.log(snake.head.length)
-    placeApple()
+    placeApple();
   };
 }
 
