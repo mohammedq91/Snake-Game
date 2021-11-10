@@ -12,6 +12,7 @@ let snake = {
 
 const apple = {
   coord: [{x:200 , y:200}],
+  // coordinates: [{x: apple.coord.Math.floor(Math.random()) , y: apple.coord.Math.floor(Math.random())  }]
   // size: [{width:20}, {height:20}],
   // color: 'red'
 }
@@ -30,12 +31,17 @@ window.onload = function (){
 function gameInitializer(){
     drawGameWindow();
     drawApple();
+    // placeApple();
     changeSnakeDirection();
     moveSnake();
     drawSnake();
     isAppleEaten();
-    // placeApple();
+    
     if (wallDetection()) gameOver();
+}
+
+function playGame(){
+  
 }
 
 function placeApple(){
@@ -43,9 +49,26 @@ function placeApple(){
   // const foodY = Math.floor(Math.random)
   // console.log("Random food placement is:", foodX, foodY)
 
-  const position = apple.coord
-  return position[Math.floor(Math.random() * position[0])]
-  console.log("randomize apple coord:", position)
+  // const position = apple.coord
+  // return position[Math.floor(Math.random() * position[0])]
+  // console.log("randomize apple coord:", position)
+    
+    // appleCoordValues = Object.values(apple.coord[0])
+    // console.log ("Apple random coord is :", appleCoordValues)
+    // return appleCoordValues [Math.floor(Math.random() * appleCoordValues.lenth)]
+  // var appleCoord = Math.floor(Math.random()*canvas.length)
+  // console.log("random is: ", appleCoord)
+  // var x = 2
+
+  // const coordinates = apple.coord[0]
+  // const coordValues = Object.values(apple.coord[0])
+  // let randomCoord = Math.floor(Math.random()* coordinates.length)
+  // console.log("randomCoord is: ", randomCoord)
+
+  for (const [key,value] of Object.entries(apple)){
+    var appleCoord = Math.floor(Math.random()*apple.coord)
+    console.log("appleCoord is :", appleCoord)
+  }
 
   // const choices = ["rock", "paper", "scissors"];
   // console.log(Math.random() *choices.length)
