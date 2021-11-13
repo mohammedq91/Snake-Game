@@ -2,6 +2,8 @@ let canvas = document.getElementById('gameCanvas');
 let canvasContext = canvas.getContext('2d');
 const gridSize = 20;
 let timer;
+let playGame;
+let endGame;
 
 let snake = {
   head: [{x: 100, y: 100}],
@@ -18,13 +20,11 @@ let apple = {
 const gameSettings = {
   isGameRunning: 0,
   snakeSize: 20
-
 }
-console.log("Apple random coordinates is :", apple.x, apple.y)
 
 window.onload = function (){  
   var framesPerSecond = 20;
-  setInterval(function(){
+  playGame = setInterval(function(){
     gameInitializer()
   }, 4000/framesPerSecond);
 }
@@ -36,7 +36,11 @@ function gameInitializer(){
     moveSnake();
     drawSnake();
     isAppleEaten();
-    if (is_Snake_Hitting_Wall()) gameOver();
+    is_Snake_Hitting_Wall();
+    if (is_Snake_Hitting_Wall()){
+      gameOver();
+    } 
+    // gameOver();
 }
 
 function placeApple(){
@@ -89,19 +93,39 @@ function moveSnake(){
 };
 
 function is_Snake_Hitting_Wall(){
-  if (snake.head[0].x === canvas.width ||
-      snake.head[0].x < 0 ||
-      snake.head[0].y >= canvas.height || 
-      snake.head[0].y < 0
-      ){
-        console.log('You have hit the wall!')
-        gameOver(); 
+  if (snake.head[0].x && snake.head[0].y === canvas.width) {
+    console.log('You have hit the wall!')
+    // gameOver();
+  };
+
+  if (snake.head[0].x && snake.head[0].y === canvas.height){
+    console.log('You have hit the wall!')
+    // gameOver();
+  };
+
+  if (snake.head[0].x && snake.head[0].y < 0){
+    console.log('You have hit the wall!')
+    // gameOver();
   };
 };
+  // if ((snake.head[0].x && snake.head[0].y === canvas.width)||
+      // (snake.head[0].x && snake.head[0].y < 0) ||
+      // (snake.head[0].x && snake.head[0].y === canvas.height) || 
+      // (snake.head[0].x && snake.head[0].y < 0)){
+        
+        // gameOver();
+        // console.log("The value of x is:", gameOver) 
+// };
 
 function gameOver(){
 
-  clearInterval(moveSnake());
+  // if (snake.head[0].x && snake.head[0].y === canvas.width){
+  //   console.log("Play Game is :", playGame)
+    endGame = clearInterval(playGame);
+    console.log("Game is Over!")
+    // console.log("End game is :", endGame)
+  }
+  
   // snake.head[0].x = snake.head[0].x
   // snake.head[0].y = snake.head[0].y
 
@@ -114,7 +138,6 @@ function gameOver(){
   //        snake.head[0].y == 0 || snake.head[0].y == canvas.height)
   // const textWidth = textHeight = 300;
   // drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
-}
 //-----------------All Drawing Below ------------------------------------
 function drawGameWindow(){  
   drawRect(0,0, canvas.width, canvas.height,'saddlebrown');
