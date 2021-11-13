@@ -29,6 +29,10 @@ window.onload = function (){
   }, 4000/framesPerSecond);
 }
 
+console.log("Canvas.width index is:", canvas.width)
+console.log("Canvas.height index is:", canvas.height)
+console.log("canvas 0 width index is:", )
+
 function gameInitializer(){
     drawGameWindow();
     drawApple();
@@ -36,11 +40,8 @@ function gameInitializer(){
     moveSnake();
     drawSnake();
     isAppleEaten();
-    is_Snake_Hitting_Wall();
-    if (is_Snake_Hitting_Wall()){
-      gameOver();
-    } 
-    // gameOver();
+    // is_Snake_Hitting_Wall();
+    if (is_Snake_Hitting_Wall()) gameOver();
 }
 
 function placeApple(){
@@ -93,49 +94,17 @@ function moveSnake(){
 };
 
 function is_Snake_Hitting_Wall(){
-  if (snake.head[0].x && snake.head[0].y === canvas.width) {
-    console.log('You have hit the wall!')
-    // gameOver();
+  return (snake.head[0].x < 0 || 
+    snake.head[0].x === canvas.width ||
+    snake.head[0].y < 0 ||
+    snake.head[0].y === canvas.height)
   };
-
-  if (snake.head[0].x && snake.head[0].y === canvas.height){
-    console.log('You have hit the wall!')
-    // gameOver();
-  };
-
-  if (snake.head[0].x && snake.head[0].y < 0){
-    console.log('You have hit the wall!')
-    // gameOver();
-  };
-};
-  // if ((snake.head[0].x && snake.head[0].y === canvas.width)||
-      // (snake.head[0].x && snake.head[0].y < 0) ||
-      // (snake.head[0].x && snake.head[0].y === canvas.height) || 
-      // (snake.head[0].x && snake.head[0].y < 0)){
-        
-        // gameOver();
-        // console.log("The value of x is:", gameOver) 
-// };
-
+  
 function gameOver(){
-
-  // if (snake.head[0].x && snake.head[0].y === canvas.width){
-  //   console.log("Play Game is :", playGame)
     endGame = clearInterval(playGame);
     console.log("Game is Over!")
-    // console.log("End game is :", endGame)
   }
   
-  // snake.head[0].x = snake.head[0].x
-  // snake.head[0].y = snake.head[0].y
-
-  // clearInterval(gameSettings.isGameRunning);
-   
-  // if (gameSettings.isGameRunning){
-  // };
-
-  // return (snake.head[0].x == 0 || snake.head[0].x == canvas.window ||
-  //        snake.head[0].y == 0 || snake.head[0].y == canvas.height)
   // const textWidth = textHeight = 300;
   // drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
 //-----------------All Drawing Below ------------------------------------
