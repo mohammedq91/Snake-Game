@@ -34,17 +34,21 @@ function gameInitializer(){
   drawApple();
   changeSnakeDirection();
   moveSnake();
-   
-  if(isAppleEaten) {
-    growSnake()
-    drawNewSnakePart();
-    placeApple()
-  };
-
-  if(is_Snake_Hitting_Wall() || is_Snake_Touching_Itself()) gameOver();
+  drawNewSnakePart();
+  
+  is_Snake_Hitting_Wall();
+  is_Snake_Touching_Itself();
 };
 
-function placeApple(){
+if(isAppleEaten) {
+  drawAppleRandomly()
+  drawNewSnakePart();
+  growSnake()
+};
+
+
+
+function drawAppleRandomly(){
     apple = { x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
               y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20}
 };
@@ -90,18 +94,22 @@ function moveSnake(){
 };
 
 function is_Snake_Hitting_Wall(){
-  return (snake.head[0].x < 0 || 
+  if (snake.head[0].x < 0 || 
     snake.head[0].x === canvas.width ||
     snake.head[0].y < 0 ||
-    snake.head[0].y === canvas.height)
+    snake.head[0].y === canvas.height){
+      gameOver();
+    };
 };
 
 function is_Snake_Touching_Itself(){
   for (let i = 1; i < snake.head.length; i++ ){
-    if(snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
-      return true
-  }
-  return false
+    if(snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) {
+      // return true
+      gameOver();
+    }; 
+  };
+  // return false;
 };
 
 // function is_Snake_Touching_Itself(){
