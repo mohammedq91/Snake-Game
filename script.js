@@ -96,26 +96,26 @@ function is_Snake_Hitting_Wall(){
     snake.head[0].y === canvas.height)
 };
 
-// function is_Snake_Touching_Itself(){
-//   for (let i = 1; i < snake.head.length; i++ ){
-//     if(snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
-//       return true
-//   }
-//   return false
-// };
-
 function is_Snake_Touching_Itself(){
   for (let i = 1; i < snake.head.length; i++ ){
-    console.log(i)
-    if(i <= 3){
-      continue
-    };
-    if (i > 3){
-      return (snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
-    };
-  return false
+    if(snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
+      return true
   }
+  return false
 };
+
+// function is_Snake_Touching_Itself(){
+//   for (let i = 1; i < snake.head.length; i++ ){
+//     console.log(i)
+//     if(i <= 3){
+//       continue
+//     };
+//     if (i > 3){
+//       return (snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
+//     };
+//   return false
+//   }
+// };
 
 // 2 parts   i = 1
 // 3 parts   i = 2
