@@ -17,11 +17,6 @@ let apple = {
   y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20
 };
 
-// const gameSettings = {
-//   isGameRunning: 0,
-//   snakeSize: 20
-// };
-
 window.onload = function (){  
   var framesPerSecond = 20;
   playGame = setInterval(function(){
@@ -35,18 +30,12 @@ function gameInitializer(){
   changeSnakeDirection();
   moveSnake();
   drawNewSnakePart();
-  
+
+  isAppleEaten();
+
   is_Snake_Hitting_Wall();
   is_Snake_Touching_Itself();
 };
-
-if(isAppleEaten) {
-  drawAppleRandomly()
-  drawNewSnakePart();
-  growSnake()
-};
-
-
 
 function drawAppleRandomly(){
     apple = { x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
@@ -55,11 +44,15 @@ function drawAppleRandomly(){
 
 function isAppleEaten(){
   let head = snake.head[0];
-  return (head.x === apple.x && head.y === apple.y)
+  if (head.x === apple.x && head.y === apple.y){
+    drawAppleRandomly()
+    drawNewSnakePart();
+    growSnake()
+  };
 };
 
 function growSnake(){
-  const body = snake.head[0] // const body = {x: snake.head.x , y: snake.head.y} 
+  const body = snake.head[0].x & snake.head[0].y // const body = {x: snake.head.x , y: snake.head.y} 
   snake.head.push(body)
 };
 
@@ -104,47 +97,13 @@ function is_Snake_Hitting_Wall(){
 
 function is_Snake_Touching_Itself(){
   for (let i = 1; i < snake.head.length; i++ ){
-    if(snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) {
-      // return true
+    if (snake.head[0].x === snake.head[i].x && 
+        snake.head[0].y === snake.head[i].y) {
       gameOver();
     }; 
   };
-  // return false;
 };
 
-// function is_Snake_Touching_Itself(){
-//   for (let i = 1; i < snake.head.length; i++ ){
-//     console.log(i)
-//     if(i <= 3){
-//       continue
-//     };
-//     if (i > 3){
-//       return (snake.head[0].x === snake.head[i].x && snake.head[0].y === snake.head[i].y) 
-//     };
-//   return false
-//   }
-// };
-
-// 2 parts   i = 1
-// 3 parts   i = 2
-// 4 parts   i = 3
-// 5 parts   i =
-
-//TAKES IN INPUT 
-//DOES SOMETHING TO INPUT 
-//RETURNS THE MODIFIED INPUT 
-
-// Goal
-// if snake head's coordinates (x & y) equal to any of snake body's coordinates (x & y)
-// game over
-
-// 1. Loop through each of the snake's part 
-// 2. Create conditional statement for Snake's body coordinates (x & y)
-// 3. If snake's head coordinates (x, y) equals to any of the snake's parts coordiantes (x,y)
-// 4. Retrun true.
-
-//   0         1       2    N - 1
-//[{HEAD}, {PART1}, {PART2}, ...]
 function gameOver(){
   endGame = clearInterval(playGame);
   console.log("Game is Over!")
