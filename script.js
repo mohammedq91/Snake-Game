@@ -4,9 +4,13 @@ const gridSize = 20;
 let timer;
 let playGame;
 let endGame;
+let score = 0;
+
+const scoreElement = document.getElementById('score');
 
 let snake = {
-  head: [{x: 100, y: 100}],
+  head: [{x: 100, y: 100}, {x: 120, y: 100}],
+
   // speed: [{x: 0, y: 0}],
   // body: [{x: snake.head.x , y: snake.head.y}],
   direction: undefined
@@ -35,6 +39,7 @@ function gameInitializer(){
 
   is_Snake_Hitting_Wall();
   is_Snake_Touching_Itself();
+
 };
 
 function drawAppleRandomly(){
@@ -48,6 +53,10 @@ function isAppleEaten(){
     drawAppleRandomly()
     drawNewSnakePart();
     growSnake()
+    // Increment Score
+    scoreElement.textContent = score += 1;
+     
+    console.log('increment score');
   };
 };
 
@@ -67,9 +76,11 @@ function changeSnakeDirection () {
 };
 
 function moveSnake(){
-  for (let i = snake.head.length -1; i > 0; --i){
+  for (let i = snake.head.length -1; i > 0; i--){
     snake.head[i] = Object.assign({}, snake.head[i-1])
   };
+
+ 
   switch (snake.direction) {
     case "up":
       snake.head[0].y -= gridSize;
@@ -92,6 +103,7 @@ function is_Snake_Hitting_Wall(){
     snake.head[0].y < 0 ||
     snake.head[0].y === canvas.height){
       gameOver();
+      gameOverText();
     };
 };
 
@@ -100,12 +112,13 @@ function is_Snake_Touching_Itself(){
     if (snake.head[0].x === snake.head[i].x && 
         snake.head[0].y === snake.head[i].y) {
       gameOver();
+      gameOverText();
     }; 
   };
 };
 
 function gameOver(){
-  endGame = clearInterval(playGame);
+  clearInterval(playGame);
   console.log("Game is Over!")
 };
   
@@ -121,9 +134,16 @@ function drawApple(){
 }
 
 function drawNewSnakePart(){
-  snake.head.forEach((part) => {
-    drawRect(part.x, part.y, gridSize, gridSize, 'black')
-  });
+   snake.head.forEach((part) => {
+     drawRect(part.x, part.y, gridSize, gridSize, 'black')
+   });
+};
+
+function gameOverText(){
+  canvasContext.font = '30px orange';
+  canvasContext.fillStyle = 'blue';
+  canvasContext.fillText('Game Over!', 115, canvas.height/2)
+  console.log("Draw Text")
 };
 
 function drawText(font, color, text, posX, posY){
@@ -136,12 +156,6 @@ function drawRect(posX, posY, width, height, color){
   canvasContext.fillStyle = color;
   canvasContext.fillRect (posX, posY, width, height);
 };
-
-// function gameOverText(text, startCoordinate, endCoordinate){
-//   canvasContext.font = '100px orange';
-//   canvasContext.fillStyle = 'orange';
-//   canvasContext.fillText(text, startCoordinate, endCoordinate)
-// };
 
 // function drawCircle (centerX, centerY, radius, drawColor){
 //   canvasContext.fillStyle = drawColor;
