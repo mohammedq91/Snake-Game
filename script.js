@@ -5,14 +5,11 @@ let timer;
 let playGame;
 let endGame;
 let score = 0;
-
 const scoreElement = document.getElementById('score');
+let startGame = true;
 
 let snake = {
-  head: [{x: 100, y: 100}, {x: 120, y: 100}],
-
-  // speed: [{x: 0, y: 0}],
-  // body: [{x: snake.head.x , y: snake.head.y}],
+  head: [{x: 100, y: 100},{x: 80 , y:100}],
   direction: undefined
 };
 
@@ -21,27 +18,41 @@ let apple = {
   y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20
 };
 
+let arrow;
 window.onload = function (){  
-  var framesPerSecond = 20;
-  playGame = setInterval(function(){
-    gameInitializer()
-  }, 4000/framesPerSecond);
+  drawGameWindow();
+  arrow = pressArrowText();          
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === "Space"){     
+      arrow = false;  // arrow = '';       
+      let framesPerSecond = 20;   
+      playGame = setInterval(function(){       
+        gameInitializer()                   
+      }, 4000/framesPerSecond);
+    };     
+  });
 };
 
-function gameInitializer(){
+// create event listener for spacebar
+  // when specarebar is pressed
+  // fire off this setInterval:
+
+function gameInitializer(){ 
   drawGameWindow();
   drawApple();
   changeSnakeDirection();
-  moveSnake();
+  
+  if (snake.direction != undefined){
+   moveSnake();
+  }
+
   drawNewSnakePart();
-
   isAppleEaten();
-
   is_Snake_Hitting_Wall();
   is_Snake_Touching_Itself();
-
 };
-
+  
 function drawAppleRandomly(){
     apple = { x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
               y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20}
@@ -53,10 +64,7 @@ function isAppleEaten(){
     drawAppleRandomly()
     drawNewSnakePart();
     growSnake()
-    // Increment Score
     scoreElement.textContent = score += 1;
-     
-    console.log('increment score');
   };
 };
 
@@ -79,8 +87,7 @@ function moveSnake(){
   for (let i = snake.head.length -1; i > 0; i--){
     snake.head[i] = Object.assign({}, snake.head[i-1])
   };
-
- 
+  
   switch (snake.direction) {
     case "up":
       snake.head[0].y -= gridSize;
@@ -122,28 +129,35 @@ function gameOver(){
   console.log("Game is Over!")
 };
   
-// const textWidth = textHeight = 300;
-// drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
-//-----------------All Drawing Below ------------------------------------
+//-----------------All Drawing Objects Below ------------------------------------
 function drawGameWindow(){  
-  drawRect(0,0, canvas.width, canvas.height,'saddlebrown');
+  drawRect(0,0, canvas.width, canvas.height,'SaddleBrown');
 };
 
 function drawApple(){
-    drawRect(apple.x, apple.y , gridSize, gridSize, 'green') 
+    drawRect(apple.x, apple.y , gridSize, gridSize, 'DarkGreen') 
 }
 
 function drawNewSnakePart(){
    snake.head.forEach((part) => {
-     drawRect(part.x, part.y, gridSize, gridSize, 'black')
+     drawRect(part.x, part.y, gridSize, gridSize, 'Black')
    });
 };
 
 function gameOverText(){
-  canvasContext.font = '30px orange';
-  canvasContext.fillStyle = 'blue';
+  canvasContext.font = ' bold 30px Red';
+  canvasContext.fillStyle = 'Red';
   canvasContext.fillText('Game Over!', 115, canvas.height/2)
-  console.log("Draw Text")
+};
+
+function pressArrowText(){
+  canvasContext.shadowBlur = '10';
+  canvasContext.shadowColor = 'yellow'
+  canvasContext.font = 'bold 20px black';
+  canvasContext.fillStyle = 'black';
+  
+  canvasContext.fillText('Press Spacebar To Play The Game!', canvas.width/8, 2*canvas.height/3)
+  console.log("Draw Arrow")
 };
 
 function drawText(font, color, text, posX, posY){
@@ -165,3 +179,19 @@ function drawRect(posX, posY, width, height, color){
 //   // "true" to draw circle clock or clock-wise circle?
 //   canvasContext.fill()
 //  }; 
+
+// const textWidth = textHeight = 300;
+// drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
+
+// --------------Keyboard Event Listener Types------------
+// document.onkeydown = function(e){
+//   if (e.key === ' '){
+//     console.log('spacebar')
+//   };
+// };
+
+// document.addEventListener('keydown', (e) =>{
+//   if (e.key === " "){
+//     console.log('bar');
+//   };
+// });
