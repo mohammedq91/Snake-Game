@@ -1,12 +1,12 @@
 let canvas = document.getElementById('gameCanvas');
 let canvasContext = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
 const gridSize = 20;
-let timer;
 let playGame;
 let endGame;
 let score = 0;
-const scoreElement = document.getElementById('score');
-let startGame = true;
+let start;
+let restart;
 
 let snake = {
   head: [{x: 100, y: 100},{x: 80 , y:100}],
@@ -18,39 +18,50 @@ let apple = {
   y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20
 };
 
-let arrow;
 window.onload = function (){  
   drawGameWindow();
-  arrow = pressArrowText();          
+  // debugger;
+  start = startGameText();  
+  console.log('Start is:', start)        
 
   document.addEventListener('keydown', (e) => {
-    if (e.code === "Space"){     
-      arrow = false;  // arrow = '';       
-      let framesPerSecond = 20;   
-      playGame = setInterval(function(){       
-        gameInitializer()                   
-      }, 4000/framesPerSecond);
+    if (e.code === "Space"){  
+      // debugger;    
+      start = false;  // start = '';       
+      // let framesPerSecond = 20;   
+      // playGame = setInterval(function(){       
+      //   gameInitializer()                   
+      // }, 4000/framesPerSecond);
+      startGame();
     };     
   });
 };
 
-// create event listener for spacebar
-  // when specarebar is pressed
-  // fire off this setInterval:
+function startGame(){
+  let framesPerSecond = 20;   
+      playGame = setInterval(function(){       
+        gameInitializer()                   
+      }, 4000/framesPerSecond);
+
+}
 
 function gameInitializer(){ 
   drawGameWindow();
   drawApple();
   changeSnakeDirection();
-  
   if (snake.direction != undefined){
    moveSnake();
   }
-
   drawNewSnakePart();
   isAppleEaten();
   is_Snake_Hitting_Wall();
   is_Snake_Touching_Itself();
+
+  // if(gameOver = true){
+  //   restart = restartGameText();
+  //   if (e.code === 'space'){
+  //     restart = false;
+  // }
 };
   
 function drawAppleRandomly(){
@@ -104,31 +115,51 @@ function moveSnake(){
   };
 };
 
-function is_Snake_Hitting_Wall(){
+function is_Snake_Hitting_Wall(restart){
   if (snake.head[0].x < 0 || 
     snake.head[0].x === canvas.width ||
     snake.head[0].y < 0 ||
     snake.head[0].y === canvas.height){
-      gameOver();
+      gameOver(); 
       gameOverText();
+      // debugger;
+      restart = restartGameText();
+      console.log('restart is', restart)
+  };    
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === "Enter"){
+      console.log('Enter is pressed!')
+      debugger;
+      restart = false;
+      console.log('restart value is:', restart)
+        // playGame = true; 
     };
+  });
 };
 
-function is_Snake_Touching_Itself(){
+function is_Snake_Touching_Itself(e, start){
   for (let i = 1; i < snake.head.length; i++ ){
     if (snake.head[0].x === snake.head[i].x && 
         snake.head[0].y === snake.head[i].y) {
       gameOver();
       gameOverText();
+      restart = restartGameText();
+      console.log('restart')
+
+      Event = true;
+      if (e.code === 'space'){
+        endGame = true;
+        startGame();
+      }
     }; 
   };
 };
 
 function gameOver(){
-  clearInterval(playGame);
-  console.log("Game is Over!")
+  endGame = clearInterval(playGame);
 };
-  
+
 //-----------------All Drawing Objects Below ------------------------------------
 function drawGameWindow(){  
   drawRect(0,0, canvas.width, canvas.height,'SaddleBrown');
@@ -150,14 +181,20 @@ function gameOverText(){
   canvasContext.fillText('Game Over!', 115, canvas.height/2)
 };
 
-function pressArrowText(){
+function startGameText(){
   canvasContext.shadowBlur = '10';
   canvasContext.shadowColor = 'yellow'
   canvasContext.font = 'bold 20px black';
   canvasContext.fillStyle = 'black';
   
-  canvasContext.fillText('Press Spacebar To Play The Game!', canvas.width/8, 2*canvas.height/3)
-  console.log("Draw Arrow")
+  canvasContext.fillText('Press Space To Start The Game', canvas.width/8, 2*canvas.height/3)
+};
+
+function restartGameText(){
+  // debugger;
+  canvasContext.font = 'bold 20px black';
+  canvasContext.fillStyle = 'black';
+  canvasContext.fillText('Press Enter To Restart The Game', canvas.width/8, 2*canvas.height/3)
 };
 
 function drawText(font, color, text, posX, posY){
@@ -171,6 +208,7 @@ function drawRect(posX, posY, width, height, color){
   canvasContext.fillRect (posX, posY, width, height);
 };
 
+//--------------Draw Circle Object----------------------
 // function drawCircle (centerX, centerY, radius, drawColor){
 //   canvasContext.fillStyle = drawColor;
 //   canvasContext.beginPath();
@@ -179,11 +217,7 @@ function drawRect(posX, posY, width, height, color){
 //   // "true" to draw circle clock or clock-wise circle?
 //   canvasContext.fill()
 //  }; 
-
-// const textWidth = textHeight = 300;
-// drawText('30px Arial', 'orange','Game Over!', textWidth, textHeight)
-
-// --------------Keyboard Event Listener Types------------
+// --------------Keyboard Event Listener Methods-----------
 // document.onkeydown = function(e){
 //   if (e.key === ' '){
 //     console.log('spacebar')
