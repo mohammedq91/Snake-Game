@@ -6,7 +6,7 @@ let playGame;
 let endGame;
 let score = 0;
 let start;
-let restart;
+// let restart;
 
 let snake = {
   head: [{x: 100, y: 100},{x: 80 , y:100}],
@@ -20,13 +20,11 @@ let apple = {
 
 window.onload = function (){  
   drawGameWindow();
-  // debugger;
   start = startGameText();  
   console.log('Start is:', start)        
 
   document.addEventListener('keydown', (e) => {
-    if (e.code === "Space"){  
-      // debugger;    
+    if (e.code === "Space"){      
       start = false;  // start = '';       
       // let framesPerSecond = 20;   
       // playGame = setInterval(function(){       
@@ -42,6 +40,20 @@ function startGame(){
       playGame = setInterval(function(){       
         gameInitializer()                   
       }, 4000/framesPerSecond);
+}
+
+function restartGame(restart, playGame){
+  document.addEventListener('keyup', (e) => {
+    if (e.code === "Enter"){
+      console.log('Enter is pressed!')
+      // gameOverText() 
+      // restart = false;
+      // restartGameText() = restart;
+      // restart = false;
+      // playGame = true; 
+      console.log("Play Game is:", playGame)
+    };
+  });
 
 }
 
@@ -115,49 +127,39 @@ function moveSnake(){
   };
 };
 
-function is_Snake_Hitting_Wall(restart){
+function is_Snake_Hitting_Wall(){
   if (snake.head[0].x < 0 || 
     snake.head[0].x === canvas.width ||
     snake.head[0].y < 0 ||
     snake.head[0].y === canvas.height){
       gameOver(); 
-      gameOverText();
-      // debugger;
-      restart = restartGameText();
-      console.log('restart is', restart)
-  };    
-
-  document.addEventListener('keydown', (e) => {
-    if (e.code === "Enter"){
-      console.log('Enter is pressed!')
-      debugger;
-      restart = false;
-      console.log('restart value is:', restart)
-        // playGame = true; 
-    };
-  });
+      
+  };  
+  // document.addEventListener('keyup', (e) => {
+  //   if (e.code === "Enter"){
+  //     console.log('Enter is pressed!') 
+  //     restartGame(); 
+  //   };
+  // });
 };
 
-function is_Snake_Touching_Itself(e, start){
+function is_Snake_Touching_Itself(){
   for (let i = 1; i < snake.head.length; i++ ){
     if (snake.head[0].x === snake.head[i].x && 
         snake.head[0].y === snake.head[i].y) {
       gameOver();
       gameOverText();
-      restart = restartGameText();
-      console.log('restart')
-
-      Event = true;
-      if (e.code === 'space'){
-        endGame = true;
-        startGame();
-      }
+      restartGameText();
+      restartGame();
     }; 
   };
 };
 
 function gameOver(){
   endGame = clearInterval(playGame);
+  gameOverText();
+  restart = restartGameText();
+  restartGame(); 
 };
 
 //-----------------All Drawing Objects Below ------------------------------------
