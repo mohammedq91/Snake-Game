@@ -3,10 +3,7 @@ let canvasContext = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const gridSize = 20;
 let playGame;
-let endGame;
 let score = 0;
-let start;
-// let restart;
 
 let snake = {
   head: [{x: 100, y: 100},{x: 80 , y:100}],
@@ -20,16 +17,11 @@ let apple = {
 
 window.onload = function (){  
   drawGameWindow();
-  start = startGameText();  
-  console.log('Start is:', start)        
+  let  startText = startGameText();          
 
   document.addEventListener('keydown', (e) => {
     if (e.code === "Space"){      
-      start = false;  // start = '';       
-      // let framesPerSecond = 20;   
-      // playGame = setInterval(function(){       
-      //   gameInitializer()                   
-      // }, 4000/framesPerSecond);
+      startText = false;  // start = '';       
       startGame();
     };     
   });
@@ -40,22 +32,22 @@ function startGame(){
       playGame = setInterval(function(){       
         gameInitializer()                   
       }, 4000/framesPerSecond);
-}
+};
 
-function restartGame(restart, playGame){
+function restartGame(){
   document.addEventListener('keyup', (e) => {
-    if (e.code === "Enter"){
+    if (e.code === "Enter" /*& e.code != */){  
+      // how to lock the remaining keyboard keys when restarting with "Enter"?
       console.log('Enter is pressed!')
-      // gameOverText() 
-      // restart = false;
-      // restartGameText() = restart;
-      // restart = false;
-      // playGame = true; 
-      console.log("Play Game is:", playGame)
+      snake = {
+        head: [{x: 100, y: 100},{x: 80 , y:100}],
+        direction: undefined
+      };
+      placeAppleRandomly();
+      startGame();
     };
   });
-
-}
+};
 
 function gameInitializer(){ 
   drawGameWindow();
@@ -68,15 +60,9 @@ function gameInitializer(){
   isAppleEaten();
   is_Snake_Hitting_Wall();
   is_Snake_Touching_Itself();
-
-  // if(gameOver = true){
-  //   restart = restartGameText();
-  //   if (e.code === 'space'){
-  //     restart = false;
-  // }
 };
   
-function drawAppleRandomly(){
+function placeAppleRandomly(){
     apple = { x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
               y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20}
 };
@@ -84,7 +70,7 @@ function drawAppleRandomly(){
 function isAppleEaten(){
   let head = snake.head[0];
   if (head.x === apple.x && head.y === apple.y){
-    drawAppleRandomly()
+    placeAppleRandomly()
     drawNewSnakePart();
     growSnake()
     scoreElement.textContent = score += 1;
@@ -110,7 +96,7 @@ function moveSnake(){
   for (let i = snake.head.length -1; i > 0; i--){
     snake.head[i] = Object.assign({}, snake.head[i-1])
   };
-  
+
   switch (snake.direction) {
     case "up":
       snake.head[0].y -= gridSize;
@@ -133,14 +119,7 @@ function is_Snake_Hitting_Wall(){
     snake.head[0].y < 0 ||
     snake.head[0].y === canvas.height){
       gameOver(); 
-      
   };  
-  // document.addEventListener('keyup', (e) => {
-  //   if (e.code === "Enter"){
-  //     console.log('Enter is pressed!') 
-  //     restartGame(); 
-  //   };
-  // });
 };
 
 function is_Snake_Touching_Itself(){
@@ -148,18 +127,15 @@ function is_Snake_Touching_Itself(){
     if (snake.head[0].x === snake.head[i].x && 
         snake.head[0].y === snake.head[i].y) {
       gameOver();
-      gameOverText();
-      restartGameText();
-      restartGame();
     }; 
   };
 };
 
 function gameOver(){
-  endGame = clearInterval(playGame);
+  clearInterval(playGame);
   gameOverText();
-  restart = restartGameText();
-  restartGame(); 
+  restartGameText();
+  restartGame();
 };
 
 //-----------------All Drawing Objects Below ------------------------------------
@@ -178,25 +154,25 @@ function drawNewSnakePart(){
 };
 
 function gameOverText(){
-  canvasContext.font = ' bold 30px Red';
+  canvasContext.font = ' bold 50px Red';
   canvasContext.fillStyle = 'Red';
-  canvasContext.fillText('Game Over!', 115, canvas.height/2)
+  canvasContext.fillText('Game Over!', canvas.width/7, canvas.height/2)
 };
 
 function startGameText(){
   canvasContext.shadowBlur = '10';
   canvasContext.shadowColor = 'yellow'
-  canvasContext.font = 'bold 20px black';
+  canvasContext.font = 'bold 25px black';
   canvasContext.fillStyle = 'black';
   
-  canvasContext.fillText('Press Space To Start The Game', canvas.width/8, 2*canvas.height/3)
+  canvasContext.fillText('Press Space To Start', canvas.width/5, 2*canvas.height/3)
 };
 
 function restartGameText(){
   // debugger;
-  canvasContext.font = 'bold 20px black';
+  canvasContext.font = 'bold 25px black';
   canvasContext.fillStyle = 'black';
-  canvasContext.fillText('Press Enter To Restart The Game', canvas.width/8, 2*canvas.height/3)
+  canvasContext.fillText('Press Enter To Restart', canvas.width/6, 2*canvas.height/3)
 };
 
 function drawText(font, color, text, posX, posY){
