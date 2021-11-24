@@ -1,9 +1,12 @@
-let canvas = document.getElementById('gameCanvas');
+let canvas = document.getElementById('game-canvas');
 let canvasContext = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
-const gridSize = 20;
+
+const GRID_SIZE = 20;
+
 let playGame;
-let score = 0;
+let score = 0; 
+let isGameOver = false;
 
 let snake = {
   head: [{x: 100, y: 100},{x: 80 , y:100}],
@@ -11,51 +14,39 @@ let snake = {
 };
 
 let apple = {
-  x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
-  y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20
+  x: "", 
+  y: "",
 };
 
 window.onload = function (){  
   drawGameWindow();
-  let  startText = startGameText();          
-
+  startGameText();
+  placeAppleRandomly();
+            
   document.addEventListener('keydown', (e) => {
-    if (e.code === "Space"){      
-      startText = false;  // start = '';       
-      startGame();
-    };     
-  });
+    if (e.code === "Space" && isGameOver === false) startGame();
+    if (e.code === "Enter" && isGameOver === true) resetGame();     
+  });     
 };
 
-function startGame(){
-  let framesPerSecond = 20;   
-      playGame = setInterval(function(){       
-        gameInitializer()                   
-      }, 4000/framesPerSecond);
+function startGame(){   
+  playGame = setInterval(()=> gameInitializer(), 4000/GRID_SIZE)
 };
 
-function restartGame(){
-  document.addEventListener('keyup', (e) => {
-    if (e.code === "Enter" /*& e.code != */){  
-      // how to lock the remaining keyboard keys when restarting with "Enter"?
-      console.log('Enter is pressed!')
-      snake = {
-        head: [{x: 100, y: 100},{x: 80 , y:100}],
-        direction: undefined
-      };
-      placeAppleRandomly();
-      startGame();
-    };
-  });
+function resetGame(){
+  snake = {
+    head: [{x: 100, y: 100},{x: 80 , y:100}],
+    direction: undefined
+  };
+  placeAppleRandomly();
+  startGame();
 };
 
 function gameInitializer(){ 
   drawGameWindow();
   drawApple();
   changeSnakeDirection();
-  if (snake.direction != undefined){
-   moveSnake();
-  }
+  if (snake.direction) moveSnake();
   drawNewSnakePart();
   isAppleEaten();
   is_Snake_Hitting_Wall();
@@ -63,8 +54,8 @@ function gameInitializer(){
 };
   
 function placeAppleRandomly(){
-    apple = { x: Math.floor(Math.random() * (canvas.width - gridSize)/20) * 20 , 
-              y: Math.floor(Math.random() * (canvas.height - gridSize)/20) * 20}
+    apple = { x: Math.floor(Math.random() * (canvas.width - GRID_SIZE)/GRID_SIZE) * GRID_SIZE , 
+              y: Math.floor(Math.random() * (canvas.height - GRID_SIZE)/GRID_SIZE) * GRID_SIZE}
 };
 
 function isAppleEaten(){
@@ -78,17 +69,28 @@ function isAppleEaten(){
 };
 
 function growSnake(){
-  const body = snake.head[0].x & snake.head[0].y // const body = {x: snake.head.x , y: snake.head.y} 
+  const body = snake.head[0].x && snake.head[0].y 
   snake.head.push(body)
 };
 
 function changeSnakeDirection () {
   document.onkeydown = function(e){
-    var keyboard = e.key;
-    if(keyboard === 'ArrowUp' && snake.direction != "down") snake.direction = "up";
-    if(keyboard === 'ArrowDown' && snake.direction != "up") snake.direction = "down"; 
-    if(keyboard === 'ArrowRight' && snake.direction != "left") snake.direction = "right";
-    if(keyboard === 'ArrowLeft' && snake.direction != "right") snake.direction = "left";
+    switch (e.code) {
+      case "ArrowUp":
+        if(snake.direction != "down") snake.direction = "up"
+        break;
+      case "ArrowDown":
+        if(snake.direction != "up") snake.direction = "down"
+        break;
+      case "ArrowRight":
+        if(snake.direction != "left") snake.direction = "right"
+        break;      
+      case "ArrowLeft":
+        if(snake.direction != "right") snake.direction = "left"
+        break;
+      default:
+        return;
+    };
   };
 };
 
@@ -99,17 +101,19 @@ function moveSnake(){
 
   switch (snake.direction) {
     case "up":
-      snake.head[0].y -= gridSize;
+      snake.head[0].y -= GRID_SIZE;
       break;
     case "down":
-      snake.head[0].y += gridSize;
+      snake.head[0].y += GRID_SIZE;
       break;
     case "right":
-      snake.head[0].x += gridSize;
+      snake.head[0].x += GRID_SIZE;
       break;    
     case "left":
-      snake.head[0].x -= gridSize;
+      snake.head[0].x -= GRID_SIZE;
       break;
+    default:
+      return;
   };
 };
 
@@ -135,21 +139,21 @@ function gameOver(){
   clearInterval(playGame);
   gameOverText();
   restartGameText();
-  restartGame();
+  isGameOver = true;
+  scoreElement.textContent = 0;
 };
 
-//-----------------All Drawing Objects Below ------------------------------------
 function drawGameWindow(){  
   drawRect(0,0, canvas.width, canvas.height,'SaddleBrown');
 };
 
 function drawApple(){
-    drawRect(apple.x, apple.y , gridSize, gridSize, 'DarkGreen') 
+    drawRect(apple.x, apple.y , GRID_SIZE, GRID_SIZE, 'DarkGreen') 
 }
 
 function drawNewSnakePart(){
    snake.head.forEach((part) => {
-     drawRect(part.x, part.y, gridSize, gridSize, 'Black')
+     drawRect(part.x, part.y, GRID_SIZE, GRID_SIZE, 'Black')
    });
 };
 
@@ -169,7 +173,6 @@ function startGameText(){
 };
 
 function restartGameText(){
-  // debugger;
   canvasContext.font = 'bold 25px black';
   canvasContext.fillStyle = 'black';
   canvasContext.fillText('Press Enter To Restart', canvas.width/6, 2*canvas.height/3)
@@ -185,25 +188,3 @@ function drawRect(posX, posY, width, height, color){
   canvasContext.fillStyle = color;
   canvasContext.fillRect (posX, posY, width, height);
 };
-
-//--------------Draw Circle Object----------------------
-// function drawCircle (centerX, centerY, radius, drawColor){
-//   canvasContext.fillStyle = drawColor;
-//   canvasContext.beginPath();
-//   canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true)
-//   // "0" and "Math.PI*2" are the angles in radians around the circle is being drawn.
-//   // "true" to draw circle clock or clock-wise circle?
-//   canvasContext.fill()
-//  }; 
-// --------------Keyboard Event Listener Methods-----------
-// document.onkeydown = function(e){
-//   if (e.key === ' '){
-//     console.log('spacebar')
-//   };
-// };
-
-// document.addEventListener('keydown', (e) =>{
-//   if (e.key === " "){
-//     console.log('bar');
-//   };
-// });
