@@ -1,10 +1,6 @@
 # Snake Game
 #### Snake game written in Javascript, HTML, and CSS.
-<<<<<<< HEAD
-#### Play it ![here](http://127.0.0.1:3000/index.html)
-=======
 #### Play it ![here](http://127.0.0.1:5500/index.html)
->>>>>>> 605c5209110fca9c20cb9e159a29d0228ef24234
 
 ![Snake Game Photo.png](https://github.com/mohammedq91/Snake-Game/blob/main/SnakeGamePhoto.png)
 
