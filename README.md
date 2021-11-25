@@ -2,7 +2,7 @@
 #### Snake game written in Javascript, HTML, and CSS.
 #### Play it [here](http://127.0.0.1:5500/index.html)
 
-![Snake Game Photo](C:\Users\moham\Music\Snake Game\SnakeGamePhoto.png)
+![Snake Game Photo!](file:///C:/Users/moham/Music/Snake%20Game/SnakeGamePhoto.png)
 
 ## Summary
 
