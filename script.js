@@ -140,7 +140,8 @@ function gameOver(){
   gameOverText();
   restartGameText();
   isGameOver = true;
-  scoreElement.textContent = 0;
+  score = 0;
+  scoreElement.textContent = score;
 };
 
 function drawGameWindow(){  
